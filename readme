@@ -1,0 +1,5 @@
+git init
+git remote add origin https://github.com/anzarahmed14/Product_Service_NodeJS.git
+git add .
+git commit -m "msg"
+git push -u origin main

@@ -1,0 +1,31 @@
+{
+  "name": "product_service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "mssql": "^11.0.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.27",
+    "uuid": "^13.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
