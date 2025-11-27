@@ -12,6 +12,9 @@ export class ProductEntity{
     @Column()
     productSKU:string="";
 
+     @Column()
+    productImage:string="";
+
     @Column()
     price!:number;
 

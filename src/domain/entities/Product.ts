@@ -4,6 +4,7 @@ export class Product{
     constructor(public id:string,
         public productName:string,
         public productSKU:string,
+        public productImage:string,
         public price:number,
         public category:Category,
         public createdAt:Date,

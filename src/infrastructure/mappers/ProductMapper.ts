@@ -8,6 +8,7 @@ export class ProductMapper{
             id:entity.id,
             productName:entity.productName,
             productSKU:entity.productSKU,
+            productImage:entity.productImage,
             price:entity.price,
             createdAt: entity.createdAt,
             updatedAt: entity.updatedAt,
@@ -28,7 +29,8 @@ export class ProductMapper{
         }
 
         entity.productName = domain.productName;
-        entity.productSKU = domain.productName;
+        entity.productSKU = domain.productSKU;
+        entity.productImage = domain.productImage;
         entity.price = domain.price;
 
         const categoryEntity = new CategoryEntity();

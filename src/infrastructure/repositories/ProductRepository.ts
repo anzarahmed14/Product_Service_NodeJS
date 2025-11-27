@@ -4,12 +4,12 @@ import { AppDataSource } from "../db";
 import { ProductEntity } from "../db/entities/ProductEntity";
 import { ProductMapper } from "../mappers/ProductMapper";
 
-export class ProductRepository implements IProductRepository{
+export class ProductRepository implements IProductRepository {
 
     private repo = AppDataSource.getRepository(ProductEntity);
     async getProductById(id: string): Promise<Product | null> {
-         const entity = await this.repo.findOneBy({id});
-         if (!entity) {
+        const entity = await this.repo.findOneBy({ id });
+        if (!entity) {
             throw new Error(`Product with id ${id} not found`);
         }
         return entity
@@ -19,20 +19,46 @@ export class ProductRepository implements IProductRepository{
         const productDto = allProducts.map(product => ProductMapper.toDomain(product));
         return productDto;
     }
-   async createProduct(product: Product): Promise<Product> {
-         const newUser =  ProductMapper.toEntity(product)
+    async createProduct(product: Product): Promise<Product> {
+        const newProduct = ProductMapper.toEntity(product)
 
-        const saved = await this.repo.save(newUser);
+        const saved = await this.repo.save(newProduct);
         return ProductMapper.toDomain(saved);
     }
-   async updateProduct(id: string, data: Partial<Product>): Promise<Product> {
-         await this.repo.update(id,data);
-       const updated = await this.repo.findOneBy({id});
-       if (!updated) throw new Error("product not found");
-       return ProductMapper.toDomain(updated);
+    async updateProduct(id: string, data: Product): Promise<Product> {
+
+        const existing = await this.repo.findOne({
+            where: { id },
+            relations: ["category"]
+        });
+
+        if (!existing) {
+            throw new Error(`Product with id ${id} not found`);
+        }
+
+        console.log("Existing product before update:", existing);
+
+        console.log("Update data:", data);
+
+
+        // Update primitive fields
+        existing.productName = data.productName ?? existing.productName;
+        existing.productSKU = data.productSKU ?? existing.productSKU;
+        existing.price = data.price ?? existing.price;
+
+         // Update category (correct way)
+    if (data.category?.id) {
+        existing.category = { id: data.category.id } as any;  
     }
-   async deleteProduct(id: string): Promise<void> {
-        await this.repo.delete({id});
+
+        existing.updatedAt = new Date();
+
+        const saved = await this.repo.save(existing);
+
+        return ProductMapper.toDomain(saved);
     }
-    
+    async deleteProduct(id: string): Promise<void> {
+        await this.repo.delete({ id });
+    }
+
 }

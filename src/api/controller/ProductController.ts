@@ -3,6 +3,7 @@ import { ProductService } from "../../application/services/ProductService";
 import { Request, Response } from "express";
 import { ProductCreateDTO } from "../../application/dto/ProductCreateDTO";
 import { ProductUpdateDTO } from "../../application/dto/ProductUpdateDTO";
+import { plainToInstance } from "class-transformer";
 export class ProductController{
     private service = new ProductService();
 
@@ -19,7 +20,23 @@ export class ProductController{
     }
 
     createProduct = async (req: Request, res: Response) => {
-        const dto = Object.assign(new ProductCreateDTO(), req.body);
+        //const dto = Object.assign(new ProductCreateDTO(), req.body);
+        const file = req.file;
+
+
+
+        if (!file) {
+            return res.status(400).json({ error: "File is required" });
+        }
+        const dto = plainToInstance(ProductCreateDTO, {
+            productName: req.body.productName,
+            productSKU: req.body.productSKU,
+            price: req.body.price,
+            productImage: req.file?.filename,
+            categoryId: req.body.categoryId
+
+        });
+
 
         try {
             // Validate DTO
@@ -51,7 +68,16 @@ export class ProductController{
     };
 
     updateProduct = async (req: Request, res: Response) => {
-        const dto = Object.assign(new ProductUpdateDTO(), req.body);
+      //  const dto = Object.assign(new ProductUpdateDTO(), req.body);
+       const dto = plainToInstance(ProductUpdateDTO, {
+            productName: req.body.productName,
+            productSKU: req.body.productSKU,
+            price: req.body.price,
+            productImage: req.file?.filename,
+            categoryId: req.body.categoryId
+
+        });
+
         const id = req.params.id;
         const errors = await validate(dto);
         if (errors.length > 0) return res.status(400).json({ errors })

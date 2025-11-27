@@ -14,6 +14,9 @@ export class ProductCreateDTO {
     
         @IsNotEmpty()
         price!:number;
+
+        @IsNotEmpty()
+        productImage!:string;
     
         @IsNotEmpty()
         categoryId:string="";
